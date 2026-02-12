@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Valentine 💕</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'VT323', monospace;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #f5e6d3 0%, #e8d4c4 50%, #f0e4d4 100%);
+      overflow-x: hidden;
+    }
+
+    .page {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      width: 100%;
+      height: 100vh;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .page.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3); }
+      50% { box-shadow: 0 8px 30px rgba(220, 38, 38, 0.5); }
+    }
+
+    @keyframes slide-in-down {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scale-up {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* LEAVES ANIMATION */
+    @keyframes fall {
+      0% {
+        top: -10vh;
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        top: 100vh;
+        opacity: 0;
+      }
+    }
+
+    @keyframes sway {
+      0%, 100% {
+        transform: translateX(0) rotate(0deg);
+      }
+      25% {
+        transform: translateX(100px) rotate(10deg);
+      }
+      50% {
+        transform: translateX(-100px) rotate(-10deg);
+      }
+      75% {
+        transform: translateX(50px) rotate(5deg);
+      }
+    }
+
+    .leaf {
+      position: fixed;
+      pointer-events: none;
+      opacity: 0.7;
+      font-size: 2rem;
+      z-index: 5;
+    }
+
+    .leaf-1 { animation: fall 8s linear infinite, sway 4s ease-in-out infinite; }
+    .leaf-2 { animation: fall 10s linear 2s infinite, sway 5s ease-in-out 1s infinite; }
+    .leaf-3 { animation: fall 9s linear 1s infinite, sway 6s ease-in-out 2s infinite; }
+    .leaf-4 { animation: fall 11s linear 3s infinite, sway 5s ease-in-out 3s infinite; }
+    .leaf-5 { animation: fall 8.5s linear 0.5s infinite, sway 4.5s ease-in-out 0.5s infinite; }
+    .leaf-6 { animation: fall 10.5s linear 2.5s infinite, sway 5.5s ease-in-out 2.5s infinite; }
+    .leaf-7 { animation: fall 9.5s linear 1.5s infinite, sway 6.5s ease-in-out 1.5s infinite; }
+    .leaf-8 { animation: fall 11.5s linear 3.5s infinite, sway 7s ease-in-out 3.5s infinite; }
+
+    /* PAGE SPECIFIC ANIMATIONS */
+    #page1-5 .page-content,
+    #page2 .page-content,
+    #page3 .page-content {
+      animation: slide-in-down 0.6s ease-out;
+    }
+
+    /* Enhanced hover for images */
+    #page2 img {
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.15);
+    }
+
+    #page2 img:hover {
+      box-shadow: 0 15px 40px rgba(220, 38, 38, 0.3);
+    }
+
+    /* Music player enhancements */
+    #page3 #play-pause-btn {
+      font-size: inherit;
+      animation: none;
+      transition: all 0.3s ease;
+    }
+
+    #page3 button:active {
+      transform: scale(0.9);
+    }
+
+    /* PAGE 1 SPECIFIC */
+    #page1 .page-content {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 230, 211, 0.9) 100%);
+      border: 3px solid #dc2626;
+      animation: slide-in-down 0.6s ease-out;
+    }
+
+    /* Container for content */
+    .page-content {
+      width: 100%;
+      max-width: 500px;
+      padding: 1.5rem 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .page-content {
+        max-width: 600px;
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .page-content {
+        max-width: 800px;
+        padding: 2.5rem 2rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .page-content {
+        max-width: 1000px;
+        padding: 3rem 3rem;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .page-content {
+        max-width: 1150px;
+        padding: 3.5rem 4rem;
+      }
+    }
+
+    /* Envelope styling */
+    .envelope {
+      position: relative;
+      width: 200px;
+      height: 145px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, #fef3f2 0%, #fee2e2 100%);
+      border: 3px solid #dc2626;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: float 3s ease-in-out infinite;
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.2);
+    }
+
+    @media (min-width: 640px) {
+      .envelope {
+        width: 250px;
+        height: 180px;
+        margin-bottom: 2rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .envelope {
+        width: 280px;
+        height: 200px;
+        margin-bottom: 2.5rem;
+      }
+    }
+
+    .envelope:hover {
+      transform: scale(1.08);
+      box-shadow: 0 12px 35px rgba(220, 38, 38, 0.35);
+      animation: pulse-glow 1s ease-in-out infinite;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform 0.5s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .envelope.open .envelope-flap {
+      transform: rotateX(180deg);
+    }
+
+    /* Question text */
+    .question {
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #7c2d12;
+      margin: 0.5rem 0 1rem 0;
+      animation: none;
+    }
+
+    @media (min-width: 640px) {
+      .question {
+        font-size: 2rem;
+        margin: 1rem 0 1.5rem 0;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .question {
+        font-size: 2.25rem;
+        margin: 1.5rem 0 2rem 0;
+      }
+    }
+
+    .envelope.open + .question {
+      opacity: 1;
+      transform: scale(1);
+      animation: scale-up 0.5s ease-out 0.3s backwards;
+    }
+
+    /* Button container */
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s;
+      width: 100%;
+    }
+
+    @media (min-width: 640px) {
+      .btn-container {
+        flex-direction: row;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .btn-container {
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+    }
+
+    .btn-container.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Button base styles */
+    button {
+      font-family: 'VT323', monospace;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .yes-button {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      color: #fef3f2;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      font-weight: bold;
+      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 640px) {
+      .yes-button {
+        padding: 1rem 2rem;
+        font-size: 1.25rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .yes-button {
+        padding: 1.1rem 2.5rem;
+        font-size: 1.4rem;
+      }
+    }
+
+    .yes-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .yes-button:hover {
+      background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 0 10px 35px rgba(220, 38, 38, 0.5);
+      border-color: #f5e6d3;
+    }
+
+    .yes-button:hover::before {
+      left: 100%;
+    }
+
+    .yes-button:active {
+      transform: translateY(-1px) scale(0.97);
+    }
+
+    .or-text {
+      font-size: 1.25rem;
+      color: #7c2d12;
+      font-weight: bold;
+      align-self: center;
+      opacity: 0.8;
+    }
+
+    @media (min-width: 640px) {
+      .or-text {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .or-text {
+        font-size: 1.75rem;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="w-full">
+
+  <!-- PAGE 1 : ENVELOPE -->
+  <section id="page1" class="page active relative overflow-hidden">
+    <!-- Falling Leaves Background -->
+    <div class="leaf leaf-1" style="left: 10%;">🍂</div>
+    <div class="leaf leaf-2" style="left: 20%;">🍃</div>
+    <div class="leaf leaf-3" style="left: 30%;">🍂</div>
+    <div class="leaf leaf-4" style="left: 40%;">🍁</div>
+    <div class="leaf leaf-5" style="left: 50%;">🍃</div>
+    <div class="leaf leaf-6" style="left: 60%;">🍂</div>
+    <div class="leaf leaf-7" style="left: 70%;">🍁</div>
+    <div class="leaf leaf-8" style="left: 80%;">🍃</div>
+
+    <div class="page-content bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl relative z-20">
+      <div class="flex flex-col items-center">
+        <div class="envelope" onclick="openEnvelope()">
+          <div class="envelope-flap"></div>
+          <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gray-200 rounded-b-lg"></div>
+        </div>
+
+        <div class="question">
+          Will you be my Valentine? 💕
+        </div>
+
+        <div class="btn-container">
+          <button class="yes-button">
+            Yes? 💌
+          </button>
+          <span class="or-text">or</span>
+          <button class="yes-button">
+            Yes 💌
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 1.5 : COUNTDOWN -->
+  <section id="page1-5" class="page relative overflow-hidden">
+    <!-- Falling Leaves Background -->
+    <div class="leaf leaf-1" style="left: 10%;">🍂</div>
+    <div class="leaf leaf-2" style="left: 20%;">🍃</div>
+    <div class="leaf leaf-3" style="left: 30%;">🍂</div>
+    <div class="leaf leaf-4" style="left: 40%;">🍁</div>
+    <div class="leaf leaf-5" style="left: 50%;">🍃</div>
+    <div class="leaf leaf-6" style="left: 60%;">🍂</div>
+    <div class="leaf leaf-7" style="left: 70%;">🍁</div>
+    <div class="leaf leaf-8" style="left: 80%;">🍃</div>
+
+    <div class="page-content bg-gradient-to-b from-white/95 via-red-50/80 to-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-3 border-red-600 animation: slide-in-down 0.6s ease-out relative z-20">
+      <div class="flex flex-col items-center space-y-4 sm:space-y-5 md:space-y-6">
+        <!-- Decorative Top Hearts -->
+        <div class="flex gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl animate-pulse">
+          <span>💕</span>
+          <span>💖</span>
+          <span>💕</span>
+        </div>
+
+        <!-- Main Title -->
+        <div class="text-center">
+          <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-red-600 via-red-500 to-red-700 bg-clip-text text-transparent drop-shadow-lg leading-tight mb-1">
+            💘 Countdown to 💘
+          </h1>
+          <p class="text-lg sm:text-xl md:text-2xl font-bold text-red-700">Valentine's Day</p>
+        </div>
+
+        <!-- Countdown Display with Enhanced Styling -->
+        <div class="relative w-full max-w-sm px-3">
+          <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-500 rounded-2xl blur-lg opacity-30"></div>
+          <div id="countdown" class="relative text-base sm:text-lg md:text-xl font-bold text-white font-mono tracking-wide drop-shadow-lg bg-gradient-to-br from-red-600 to-red-700 px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-3.5 rounded-2xl text-center shadow-lg border-2 border-red-400"></div>
+        </div>
+
+        <!-- Motivational Text -->
+        <div class="text-center">
+          <p class="text-sm sm:text-base md:text-lg text-red-700 font-bold">Something Special is Coming! ✨</p>
+          <p class="text-xs sm:text-sm md:text-base text-amber-900 opacity-80">The most romantic day awaits...</p>
+        </div>
+
+        <!-- CTA Button -->
+        <button onclick="goToPage(2)" class="px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 md:py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full text-sm sm:text-base md:text-lg font-bold hover:shadow-lg hover:scale-105 hover:from-red-700 hover:to-red-800 transition-all duration-300 uppercase tracking-wide border-2 border-red-400">
+          ❤️ Proceed →
+        </button>
+
+        <!-- Decorative Bottom Hearts -->
+        <div class="flex gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl animate-pulse" style="animation-delay: 0.5s;">
+          <span>💖</span>
+          <span>💕</span>
+          <span>💖</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 2 : MESSAGE -->
+  <section id="page2" class="page relative overflow-hidden">
+    <!-- Falling Leaves Background -->
+    <div class="leaf leaf-1" style="left: 10%;">🍂</div>
+    <div class="leaf leaf-2" style="left: 20%;">🍃</div>
+    <div class="leaf leaf-3" style="left: 30%;">🍂</div>
+    <div class="leaf leaf-4" style="left: 40%;">🍁</div>
+    <div class="leaf leaf-5" style="left: 50%;">🍃</div>
+    <div class="leaf leaf-6" style="left: 60%;">🍂</div>
+    <div class="leaf leaf-7" style="left: 70%;">🍁</div>
+    <div class="leaf leaf-8" style="left: 80%;">🍃</div>
+
+    <div class="page-content bg-gradient-to-b from-white/95 via-red-50/80 to-white/95 backdrop-blur-md rounded-3xl shadow-2xl overflow-y-auto max-h-[95vh] border-3 border-red-600 relative z-20">
+      <div class="flex flex-col items-center space-y-3 sm:space-y-4 md:space-y-5">
+        <div class="text-center">
+          <div class="text-2xl sm:text-3xl md:text-4xl animate-bounce">❤️</div>
+          <h2 class="text-lg sm:text-xl md:text-2xl mt-1 md:mt-2 font-bold text-red-700">Happy Valentine's Day, Baby!</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 w-full place-items-center">
+          <img src="79f3b9fb-6646-497a-873b-c1944265fca2.jpg" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
+          <img src="432a00bf-67fe-45b6-b29d-f9594661f3f2.jpg" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
+          <img src="a15a49ea-7e04-46e1-8052-ef8096aef948.jpg" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
+        </div>
+
+        <div class="bg-amber-50 rounded-2xl p-3 sm:p-4 md:p-5 text-sm sm:text-base md:text-lg leading-relaxed space-y-2 shadow-inner w-full border-l-4 border-red-600">
+          <p class="italic opacity-70 text-amber-900">✏️ Your heartfelt message goes here.</p>
+          <p class="text-amber-950">This is where you can write about all the memories we share and how much you mean to me.</p>
+          <p class="text-amber-950">I love you more than words can say, and I can't wait to spend this Valentine's Day with you.</p>
+        </div>
+
+        <div class="text-right text-sm sm:text-base md:text-lg w-full">
+          <p class="text-amber-900">Forever yours,</p>
+          <p class="font-bold text-red-600">— Your Valentine</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between gap-3 w-full text-xs sm:text-sm md:text-base pt-3 border-t-2 border-red-200">
+          <button onclick="goToPage(1)" class="text-red-600 hover:text-red-700 font-bold transition hover:scale-105 uppercase">← Envelope</button>
+          <button onclick="goToPage(3)" class="text-red-600 hover:text-red-700 font-bold transition hover:scale-105 uppercase">Song →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 3 : MUSIC -->
+  <section id="page3" class="page relative overflow-hidden">
+    <!-- Falling Leaves Background -->
+    <div class="leaf leaf-1" style="left: 10%;">🍂</div>
+    <div class="leaf leaf-2" style="left: 20%;">🍃</div>
+    <div class="leaf leaf-3" style="left: 30%;">🍂</div>
+    <div class="leaf leaf-4" style="left: 40%;">🍁</div>
+    <div class="leaf leaf-5" style="left: 50%;">🍃</div>
+    <div class="leaf leaf-6" style="left: 60%;">🍂</div>
+    <div class="leaf leaf-7" style="left: 70%;">🍁</div>
+    <div class="leaf leaf-8" style="left: 80%;">🍃</div>
+
+    <div class="page-content bg-gradient-to-b from-white/95 via-red-50/80 to-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-3 border-red-600 relative z-20">
+      <div class="flex flex-col items-center space-y-3 sm:space-y-4 md:space-y-5">
+        <div class="w-full h-24 sm:h-28 md:h-32 bg-gradient-to-br from-red-200 to-red-300 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl md:text-5xl shadow-md animate-pulse">
+          🎵
+        </div>
+
+        <div class="text-center w-full">
+          <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-red-700">Lover</h3>
+          <p class="text-base sm:text-lg md:text-xl text-red-600 opacity-80 mt-0.5">Taylor Swift</p>
+        </div>
+
+        <audio id="audio-player" src="music1.mp3" preload="metadata"></audio>
+
+        <div class="w-full h-2.5 sm:h-3 bg-red-100 rounded-full overflow-hidden shadow-inner">
+          <div id="progress-bar" class="h-full w-1/4 bg-gradient-to-r from-red-500 to-red-600 transition-all duration-1000"></div>
+        </div>
+
+        <div class="flex justify-center gap-4 sm:gap-5 md:gap-6 text-2xl sm:text-3xl md:text-4xl w-full">
+          <button id="prev-btn" class="text-red-600 hover:text-red-700 hover:scale-125 transition">⏮</button>
+          <button id="play-pause-btn" class="text-red-600 hover:text-red-700 hover:scale-125 transition">▶</button>
+          <button id="next-btn" class="text-red-600 hover:text-red-700 hover:scale-125 transition">⏭</button>
+        </div>
+
+        <p class="text-xs sm:text-sm md:text-base text-red-600 opacity-70">Visual player 🎧</p>
+
+        <button onclick="goToPage(2)" class="text-red-600 hover:text-red-700 font-bold text-sm sm:text-base md:text-lg transition hover:scale-105 uppercase">
+          ← Message
+        </button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function openEnvelope() {
+    const envelope = document.querySelector('.envelope');
+    const question = document.querySelector('.question');
+    const btnContainer = document.querySelector('.btn-container');
+    envelope.classList.add('open');
+    setTimeout(() => {
+      question.style.opacity = '1';
+      question.style.transform = 'scale(1)';
+      btnContainer.classList.add('show');
+    }, 500);
+  }
+
+  function goToPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page' + page).classList.add('active');
+  }
+
+  document.querySelectorAll('#page1 .yes-button').forEach(btn => {
+    btn.addEventListener('click', () => goToPage('1-5'));
+  });
+
+  // Countdown
+  const countdownEl = document.getElementById('countdown');
+  function updateCountdown() {
+    const now = new Date();
+    let year = now.getFullYear();
+    const target = new Date(`February 14, ${year} 00:00:00`);
+    if (now > target) target.setFullYear(year + 1);
+    const diff = target - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // Audio player
+  const audio = document.getElementById('audio-player');
+  const playPauseBtn = document.getElementById('play-pause-btn');
+  const progressBar = document.getElementById('progress-bar');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  audio.addEventListener('timeupdate', () => {
+    const progress = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = progress + '%';
+  });
+
+  playPauseBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      playPauseBtn.textContent = '⏸';
+    } else {
+      audio.pause();
+      playPauseBtn.textContent = '▶';
+    }
+  });
+
+  prevBtn.addEventListener('click', () => { audio.currentTime = 0; });
+  nextBtn.addEventListener('click', () => { audio.currentTime = 0; });
+  audio.addEventListener('ended', () => { playPauseBtn.textContent = '▶'; progressBar.style.width = '0%'; });
+</script>
+
+</body>
+</html>
