@@ -3,13 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="A small elegant Valentine's Day card — ask someone to be your Valentine with style and gentle animations." />
+  <meta name="theme-color" content="#ff6666">
   <title>Valentine 💕</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <!-- Custom styles (palette, variables, microinteractions) -->
+  <link rel="stylesheet" href="styles.css">
 
   <style>
     * {
@@ -391,6 +399,17 @@
 </head>
 
 <body>
+  <!-- Global background audio (persistent across sections) -->
+  <audio id="audio-player" src="music1.mp3" preload="metadata"></audio>
+
+  <!-- Floating persistent audio control -->
+  <div id="audio-control" aria-hidden="false" aria-label="Background music control">
+    <button id="global-play-btn" class="audio-btn" aria-label="Play background music">▶</button>
+    <button id="global-mute-btn" class="audio-btn" aria-label="Mute background music">🔊</button>
+    <div id="global-progress" aria-hidden="true"><div id="global-progress-fill"></div></div>
+    <label for="global-volume" class="sr-only">Volume</label>
+    <input id="global-volume" type="range" min="0" max="1" step="0.01" value="0.6" aria-label="Background music volume" />
+  </div>
 
 <div class="w-full">
 
@@ -408,21 +427,26 @@
 
     <div class="page-content bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl relative z-20">
       <div class="flex flex-col items-center">
-        <div class="envelope" onclick="openEnvelope()">
-          <div class="envelope-flap"></div>
-          <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gray-200 rounded-b-lg"></div>
-        </div>
+            <div class="envelope" onclick="openEnvelope()" role="button" aria-pressed="false" aria-label="Open the envelope">
+              <div class="envelope-flap" aria-hidden="true"></div>
+              <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gray-200 rounded-b-lg" aria-hidden="true"></div>
+
+              <!-- Decorative animated heart inside the envelope -->
+              <svg class="envelope-heart" viewBox="0 0 24 24" width="64" height="64" aria-hidden="true" focusable="false">
+                <path fill="#dc2626" d="M12 21s-7-4.35-9.33-6.66C-0.67 11.67 3 6 7.67 7.33 9.21 8 10 9.5 12 11c2-1.5 2.79-3 4.33-3.67C21 6 25.67 11.67 21.33 14.34 19 16.65 12 21 12 21z"/>
+              </svg>
+            </div>
 
         <div class="question">
           Will you be my Valentine? 💕
         </div>
 
         <div class="btn-container">
-          <button class="yes-button">
+          <button class="yes-button" aria-label="Yes, open the surprise">
             Yes? 💌
           </button>
           <span class="or-text">or</span>
-          <button class="yes-button">
+          <button class="yes-button" aria-label="Yes, I will be your valentine">
             Yes 💌
           </button>
         </div>
@@ -462,7 +486,7 @@
         <!-- Countdown Display with Enhanced Styling -->
         <div class="relative w-full max-w-sm px-3">
           <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-500 rounded-2xl blur-lg opacity-30"></div>
-          <div id="countdown" class="relative text-base sm:text-lg md:text-xl font-bold text-white font-mono tracking-wide drop-shadow-lg bg-gradient-to-br from-red-600 to-red-700 px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-3.5 rounded-2xl text-center shadow-lg border-2 border-red-400"></div>
+          <div id="countdown" class="relative text-base sm:text-lg md:text-xl font-bold text-white font-mono tracking-wide drop-shadow-lg bg-gradient-to-br from-red-600 to-red-700 px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-3.5 rounded-2xl text-center shadow-lg border-2 border-red-400" aria-live="polite" aria-atomic="true"></div>
         </div>
 
         <!-- Motivational Text -->
@@ -471,8 +495,8 @@
           <p class="text-xs sm:text-sm md:text-base text-amber-900 opacity-80">The most romantic day awaits...</p>
         </div>
 
-        <!-- CTA Button -->
-        <button onclick="goToPage(2)" class="px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 md:py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full text-sm sm:text-base md:text-lg font-bold hover:shadow-lg hover:scale-105 hover:from-red-700 hover:to-red-800 transition-all duration-300 uppercase tracking-wide border-2 border-red-400">
+        <!-- CTA Button (locked until target date) -->
+        <button id="proceed-btn" onclick="tryProceed()" aria-label="Proceed to next page" aria-disabled="true" class="proceed-btn px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 md:py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full text-sm sm:text-base md:text-lg font-bold hover:shadow-lg hover:scale-105 hover:from-red-700 hover:to-red-800 transition-all duration-300 uppercase tracking-wide border-2 border-red-400">
           ❤️ Proceed →
         </button>
 
@@ -506,20 +530,23 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 w-full place-items-center">
-          <img src="79f3b9fb-6646-497a-873b-c1944265fca2.jpg" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
-          <img src="432a00bf-67fe-45b6-b29d-f9594661f3f2.jpg" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
-          <img src="a15a49ea-7e04-46e1-8052-ef8096aef948.jpg" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
+          <img src="79f3b9fb-6646-497a-873b-c1944265fca2.jpg" alt="Memory 1" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
+          <img src="432a00bf-67fe-45b6-b29d-f9594661f3f2.jpg" alt="Memory 2" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
+          <img src="a15a49ea-7e04-46e1-8052-ef8096aef948.jpg" alt="Memory 3" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
         </div>
 
         <div class="bg-amber-50 rounded-2xl p-3 sm:p-4 md:p-5 text-sm sm:text-base md:text-lg leading-relaxed space-y-2 shadow-inner w-full border-l-4 border-red-600">
-          <p class="italic opacity-70 text-amber-900">✏️ Your heartfelt message goes here.</p>
-          <p class="text-amber-950">This is where you can write about all the memories we share and how much you mean to me.</p>
-          <p class="text-amber-950">I love you more than words can say, and I can't wait to spend this Valentine's Day with you.</p>
+          <p class="italic opacity-70 text-amber-900">✏️ Happy Valentine's Day Baby!</p>
+          <p class="text-amber-950">To the woman who provides like a boss, gives gifts like it’s a love language, and gets mad first… then loves even harder.</p>
+          <p class="text-amber-950">You may be hot-headed and impulsive, but that just means you care loudly 😂</p>
+          <p class="text-amber-950">One minute you’re scolding me, the next minute you’re feeding me, buying me something, and making sure I’m okay.</p>
+          <p class="text-amber-950">Thank you for loving with fire, giving without hesitation, and choosing me every day, even when I annoy you.</p>
+          <p class="text-amber-950">I promise to keep up with your energy, appreciate every gift, and love you even when you’re already mad but still holding my hand.</p>
         </div>
 
         <div class="text-right text-sm sm:text-base md:text-lg w-full">
           <p class="text-amber-900">Forever yours,</p>
-          <p class="font-bold text-red-600">— Your Valentine</p>
+          <p class="font-bold text-red-600">— Toby</p>
         </div>
 
         <div class="flex flex-col sm:flex-row justify-between gap-3 w-full text-xs sm:text-sm md:text-base pt-3 border-t-2 border-red-200">
@@ -553,16 +580,15 @@
           <p class="text-base sm:text-lg md:text-xl text-red-600 opacity-80 mt-0.5">Taylor Swift</p>
         </div>
 
-        <audio id="audio-player" src="music1.mp3" preload="metadata"></audio>
 
         <div class="w-full h-2.5 sm:h-3 bg-red-100 rounded-full overflow-hidden shadow-inner">
           <div id="progress-bar" class="h-full w-1/4 bg-gradient-to-r from-red-500 to-red-600 transition-all duration-1000"></div>
         </div>
 
         <div class="flex justify-center gap-4 sm:gap-5 md:gap-6 text-2xl sm:text-3xl md:text-4xl w-full">
-          <button id="prev-btn" class="text-red-600 hover:text-red-700 hover:scale-125 transition">⏮</button>
-          <button id="play-pause-btn" class="text-red-600 hover:text-red-700 hover:scale-125 transition">▶</button>
-          <button id="next-btn" class="text-red-600 hover:text-red-700 hover:scale-125 transition">⏭</button>
+          <button id="prev-btn" class="audio-btn" aria-label="Previous">⏮</button>
+          <button id="play-pause-btn" class="audio-btn" aria-label="Play or pause">▶</button>
+          <button id="next-btn" class="audio-btn" aria-label="Next">⏭</button>
         </div>
 
         <p class="text-xs sm:text-sm md:text-base text-red-600 opacity-70">Visual player 🎧</p>
@@ -641,6 +667,8 @@
   nextBtn.addEventListener('click', () => { audio.currentTime = 0; });
   audio.addEventListener('ended', () => { playPauseBtn.textContent = '▶'; progressBar.style.width = '0%'; });
 </script>
+
+<script src="script.js" defer></script>
 
 </body>
 </html>
