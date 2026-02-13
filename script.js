@@ -104,7 +104,7 @@
     // If updateCountdown exists as a global, wrap it to also set an accessible label
     if(typeof originalTick === 'function'){
       const original = originalTick.bind(window);
-      let proceedLocked = true;
+      let proceedLocked = false;
       const proceedBtn = document.getElementById('proceed-btn');
 
       function setProceedLocked(lock){
@@ -135,10 +135,8 @@
         original();
         countdown.setAttribute('aria-label', 'Time remaining: ' + countdown.textContent);
 
-        // Unlock only on the calendar day Feb 14 (month === 1, date === 14)
-        const now = new Date();
-        const isFeb14 = (now.getMonth() === 1 && now.getDate() === 14);
-        setProceedLocked(!isFeb14);
+        // Always unlock the proceed button (removed date lock)
+        setProceedLocked(false);
       };
     }
 
