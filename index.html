@@ -80,11 +80,16 @@
   /* Game Styles */
   .heart {
     position: absolute;
-    font-size: 2rem;
+    font-size: 1.5rem;
     cursor: pointer;
     user-select: none;
     transition: transform 0.1s;
     animation: floatUp 3s linear forwards;
+  }
+  @media (min-width: 640px) {
+    .heart {
+      font-size: 2rem;
+    }
   }
   @keyframes floatUp {
     from { transform: translateY(0); opacity: 1; }
@@ -99,23 +104,43 @@
 
 <nav class="fixed w-full top-0 z-50 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-stone-200/80 transition-all duration-300">
   <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-    <span class="serif italic text-2xl tracking-wider font-semibold" style="color: var(--light-purple);">Princess Day!</span>
-    <div class="space-x-8 hidden md:block text-sm uppercase tracking-widest text-stone-600 font-medium">
+    <span class="serif italic text-xl sm:text-2xl tracking-wider font-semibold" style="color: var(--light-purple);">Princess Day!</span>
+    
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest text-stone-600 font-medium">
       <a href="#message" class="hover:text-[#8b5a83] transition duration-300">The Letter</a>
       <a href="#gallery" class="hover:text-[#8b5a83] transition duration-300">Moments</a>
       <a href="#game-section" class="hover:text-[#8b5a83] transition duration-300">Game</a>
       <a href="#wish" class="hover:text-[#8b5a83] transition duration-300">Wish</a>
       <button id="play-music" class="hover:text-[#8b5a83] transition duration-300">♪ Play Music</button>
     </div>
+    
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="md:hidden text-stone-600 hover:text-[#8b5a83] transition duration-300">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-[#fdfbf7]/95 backdrop-blur-md border-t border-stone-200/80">
+    <div class="max-w-6xl mx-auto px-6 py-4 space-y-4">
+      <a href="#message" class="block text-stone-600 hover:text-[#8b5a83] transition duration-300 uppercase tracking-widest text-sm font-medium">The Letter</a>
+      <a href="#gallery" class="block text-stone-600 hover:text-[#8b5a83] transition duration-300 uppercase tracking-widest text-sm font-medium">Moments</a>
+      <a href="#game-section" class="block text-stone-600 hover:text-[#8b5a83] transition duration-300 uppercase tracking-widest text-sm font-medium">Game</a>
+      <a href="#wish" class="block text-stone-600 hover:text-[#8b5a83] transition duration-300 uppercase tracking-widest text-sm font-medium">Wish</a>
+      <button id="play-music-mobile" class="block w-full text-left text-stone-600 hover:text-[#8b5a83] transition duration-300 uppercase tracking-widest text-sm font-medium">♪ Play Music</button>
+    </div>
   </div>
 </nav>
 
-<header class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 relative">
-  <p class="text-sm uppercase tracking-[0.3em] text-stone-500 font-medium mb-6 reveal">A very special day</p>
-  <h1 class="text-6xl md:text-8xl font-light leading-tight reveal" style="transition-delay: 100ms;">
+<header class="min-h-screen flex flex-col justify-center items-center text-center px-4 sm:px-6 pt-20 pb-12 relative">
+  <p class="text-xs sm:text-sm uppercase tracking-[0.2em] sm:tracking-[0.3em] text-stone-500 font-medium mb-4 sm:mb-6 reveal">A very special day</p>
+  <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-tight reveal" style="transition-delay: 100ms;">
     Happy <br><span class="italic font-medium" style="color: var(--light-purple);">27th Birthday</span>
   </h1>
-  <p class="mt-8 max-w-md text-stone-600 font-light leading-relaxed text-lg reveal" style="transition-delay: 200ms;">
+  <p class="mt-6 sm:mt-8 max-w-sm sm:max-w-md text-stone-600 font-light leading-relaxed text-base sm:text-lg reveal" style="transition-delay: 200ms;">
     Today is all about you. The way you exist, love, care, and make absolutely everything brighter.
   </p>
   
@@ -128,66 +153,73 @@
   <div class="petal" style="top: 60%; left: 20%; animation-delay: 3s; transform: scale(0.8);"></div>
 </header>
 
-<section id="message" class="py-24 px-6 bg-white/60 backdrop-blur-sm border-y border-stone-100">
-  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-    <div class="reveal relative">
-      <div class="absolute inset-0 bg-[#8b5a83] opacity-10 translate-x-4 translate-y-4 rounded-xl blur-sm"></div>
-      <img src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1000&auto=format&fit=crop" alt="Aesthetic flowers" class="relative z-10 w-full h-[600px] object-cover rounded-xl shadow-xl border border-stone-100">
+<section id="message" class="py-16 sm:py-24 px-4 sm:px-6 bg-white/60 backdrop-blur-sm border-y border-stone-100">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+    <div class="reveal relative order-2 lg:order-1">
+      <div class="absolute inset-0 bg-[#8b5a83] opacity-10 translate-x-2 sm:translate-x-4 translate-y-2 sm:translate-y-4 rounded-xl blur-sm"></div>
+      <img src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1000&auto=format&fit=crop" alt="Aesthetic flowers" class="relative z-10 w-full h-[400px] sm:h-[500px] lg:h-[600px] object-cover rounded-xl shadow-xl border border-stone-100">
     </div>
     
-    <div class="reveal">
-      <h2 class="text-4xl serif mb-8 text-stone-800">A little <span class="italic text-[#8b5a83]">message</span></h2>
-      <div class="space-y-6 text-stone-700 font-light leading-relaxed text-lg">
+    <div class="reveal order-1 lg:order-2">
+      <h2 class="text-3xl sm:text-4xl serif mb-6 sm:mb-8 text-stone-800">A little <span class="italic text-[#8b5a83]">message</span></h2>
+      <div class="space-y-4 sm:space-y-6 text-stone-700 font-light leading-relaxed text-base sm:text-lg">
         <p>Happy Birthday, Baby!</p>
         <p>I can't believe you are turning 27. You are such a strong, independent, hot-headed, and absolutely beautiful woman.</p>
         <p>You have proven to the world that you are not afraid. No matter what life throws at you, you just keep getting stronger and stronger. I am so incredibly proud of the woman you are, and I'm so lucky to be by your side.</p>
       </div>
-      <p class="mt-12 text-sm text-[#b08968] font-medium tracking-widest uppercase">— Yours, Toby</p>
+      <p class="mt-8 sm:mt-12 text-sm text-[#b08968] font-medium tracking-widest uppercase">— Yours, Toby</p>
     </div>
   </div>
 </section>
 
-<section id="gallery" class="py-24 px-6">
+<section id="gallery" class="py-16 sm:py-24 px-4 sm:px-6">
   <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-16 reveal">
-      <h2 class="text-4xl serif text-stone-800">Framed <span class="italic text-[#8b5a83]">Moments</span></h2>
-      <p class="mt-4 text-stone-600 font-light text-lg">Glimpses of a beautiful strong independent woman.</p>
+    <div class="text-center mb-12 sm:mb-16 reveal">
+      <h2 class="text-3xl sm:text-4xl serif text-stone-800">Framed <span class="italic text-[#8b5a83]">Moments</span></h2>
+      <p class="mt-4 text-stone-600 font-light text-base sm:text-lg">Glimpses of a beautiful strong independent woman.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
       <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 flex items-center justify-center" style="transition-delay: 100ms; background-color: var(--bg-color);">
-        <img src="princess.jpg" alt="Memory 1" class="max-w-full max-h-80 object-contain gallery-img">
+        <img src="princess.jpg" alt="Memory 1" class="max-w-full max-h-64 sm:max-h-80 object-contain gallery-img">
       </div>
-      <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 md:row-span-2 flex items-center justify-center" style="transition-delay: 200ms; background-color: var(--bg-color);">
-        <img src="princess2.jpg" alt="Memory 2" class="max-w-full max-h-80 md:max-h-full object-contain gallery-img">
+      <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 sm:row-span-2 flex items-center justify-center" style="transition-delay: 200ms; background-color: var(--bg-color);">
+        <img src="princess2.jpg" alt="Memory 2" class="max-w-full max-h-64 sm:max-h-80 lg:max-h-full object-contain gallery-img">
       </div>
       <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 flex items-center justify-center" style="transition-delay: 300ms; background-color: var(--bg-color);">
-        <img src="princess5.jpg" alt="Memory 3" class="max-w-full max-h-80 object-contain gallery-img">
+        <img src="princess5.jpg" alt="Memory 3" class="max-w-full max-h-64 sm:max-h-80 object-contain gallery-img">
       </div>
       <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 flex items-center justify-center" style="transition-delay: 400ms; background-color: var(--bg-color);">
-        <img src="princess4.jpg" alt="Memory 4" class="max-w-full max-h-80 object-contain gallery-img">
+        <img src="princess4.jpg" alt="Memory 4" class="max-w-full max-h-64 sm:max-h-80 object-contain gallery-img">
       </div>
       <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 flex items-center justify-center" style="transition-delay: 500ms; background-color: var(--bg-color);">
-        <img src="princess3.jpg" alt="Memory 5" class="max-w-full max-h-80 object-contain gallery-img">
+        <img src="princess3.jpg" alt="Memory 5" class="max-w-full max-h-64 sm:max-h-80 object-contain gallery-img">
       </div>
     </div>
   </div>
 </section>
 
-<section id="game-section" class="py-24 px-6 bg-stone-50 border-t border-stone-100">
+<section id="game-section" class="py-16 sm:py-24 px-4 sm:px-6 bg-stone-50 border-t border-stone-100">
   <div class="max-w-2xl mx-auto text-center reveal">
-    <h2 class="text-4xl serif mb-4 text-stone-800">Catch the <span class="italic text-[#8b5a83]">Love</span></h2>
-    <p class="text-stone-600 mb-8 font-light">Tap the hearts before they float away!</p>
+    <h2 class="text-3xl sm:text-4xl serif mb-4 text-stone-800">Catch the <span class="italic text-[#8b5a83]">Love</span></h2>
+    <p class="text-stone-600 mb-6 sm:mb-8 font-light text-base sm:text-lg">Tap the hearts before they float away!</p>
     
-    <div class="flex justify-center gap-12 mb-6 text-stone-600 font-medium uppercase tracking-widest text-sm">
-      <div>Score: <span id="score" class="text-[#8b5a83] text-xl">0</span></div>
-      <div>Time: <span id="time" class="text-[#8b5a83] text-xl">15</span>s</div>
+    <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-12 mb-6 text-stone-600 font-medium uppercase tracking-widest text-sm">
+      <div class="flex items-center justify-center gap-2">
+        <span>Score:</span>
+        <span id="score" class="text-[#8b5a83] text-xl sm:text-2xl">0</span>
+      </div>
+      <div class="flex items-center justify-center gap-2">
+        <span>Time:</span>
+        <span id="time" class="text-[#8b5a83] text-xl sm:text-2xl">15</span>
+        <span>s</span>
+      </div>
     </div>
 
-    <div id="game-area" class="relative w-full h-80 bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-inner cursor-crosshair mb-8">
-      </div>
+    <div id="game-area" class="relative w-full h-64 sm:h-80 bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-inner cursor-crosshair mb-6 sm:mb-8">
+    </div>
 
-    <div class="flex justify-center gap-4">
+    <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
       <button id="start-game" class="px-6 py-2 bg-[#8b5a83] text-white rounded-full uppercase tracking-widest text-xs hover:bg-[#6b4465] transition">Start Game</button>
       <button id="pause-game" class="px-6 py-2 border border-stone-300 text-stone-600 rounded-full uppercase tracking-widest text-xs hover:bg-stone-100 transition">Pause</button>
       <button id="restart-game" class="px-6 py-2 border border-stone-300 text-stone-600 rounded-full uppercase tracking-widest text-xs hover:bg-stone-100 transition">Restart</button>
@@ -195,16 +227,16 @@
   </div>
 </section>
 
-<section id="wish" class="min-h-[70vh] flex flex-col justify-center items-center text-center px-6 bg-[#232121] text-stone-100">
+<section id="wish" class="min-h-[60vh] sm:min-h-[70vh] flex flex-col justify-center items-center text-center px-4 sm:px-6 bg-[#232121] text-stone-100">
   <div class="reveal">
-    <h1 class="text-5xl md:text-7xl font-light mb-6">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-6">
       Make a <span class="italic text-[#c8a2c8]">wish!</span>
     </h1>
-    <p class="text-stone-300 font-light tracking-wide text-lg max-w-md mx-auto leading-relaxed">
+    <p class="text-stone-300 font-light tracking-wide text-base sm:text-lg max-w-md mx-auto leading-relaxed">
       Here is to another beautiful year ahead!
     </p>
     
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-16 px-8 py-3 border border-[#8b5a83] text-[#c8a2c8] uppercase tracking-widest text-xs hover:bg-[#8b5a83] hover:text-white transition duration-500 rounded-sm">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-12 sm:mt-16 px-6 sm:px-8 py-3 border border-[#8b5a83] text-[#c8a2c8] uppercase tracking-widest text-xs hover:bg-[#8b5a83] hover:text-white transition duration-500 rounded-sm">
       Back to Top
     </button>
   </div>
@@ -241,6 +273,22 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const playMusicMobile = document.getElementById('play-music-mobile');
+    
+    mobileMenuBtn.addEventListener('click', function() {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // Close mobile menu when clicking a link
+    mobileMenu.addEventListener('click', function(e) {
+      if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+        mobileMenu.classList.add('hidden');
+      }
+    });
+
     var galleryImages = document.querySelectorAll('.gallery-img');
     galleryImages.forEach(function(img) {
       img.style.cursor = 'pointer';
@@ -267,21 +315,26 @@
       bgMusic.volume = 0;
       fadeIn(bgMusic);
       playMusicBtn.textContent = '♪ Pause Music';
+      if (playMusicMobile) playMusicMobile.textContent = '♪ Pause Music';
     });
 
     // Handle pause
     bgMusic.addEventListener('pause', () => {
       playMusicBtn.textContent = '♪ Play Music';
+      if (playMusicMobile) playMusicMobile.textContent = '♪ Play Music';
     });
 
-    playMusicBtn.addEventListener('click', function() {
+    function toggleMusic() {
       if (bgMusic.paused) {
         bgMusic.currentTime = 20;
         bgMusic.play();
       } else {
         bgMusic.pause();
       }
-    });
+    }
+
+    playMusicBtn.addEventListener('click', toggleMusic);
+    if (playMusicMobile) playMusicMobile.addEventListener('click', toggleMusic);
 
     // GAME LOGIC
     const startBtn = document.getElementById('start-game');
