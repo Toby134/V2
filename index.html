@@ -1,674 +1,381 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="A small elegant Valentine's Day card — ask someone to be your Valentine with style and gentle animations." />
-  <meta name="theme-color" content="#ff6666">
-  <title>Valentine 💕</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday | A Special Tribute</title>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Custom styles (palette, variables, microinteractions) -->
-  <link rel="stylesheet" href="styles.css">
+<style>
+  :root {
+    --bg-color: #fdfbf7;
+    --text-main: #2c2c2c;
+    --text-muted: #575757; 
+    --accent: #b08968; 
+    --light-purple: #8b5a83; 
+  }
 
-  <style> 
-    * {
-      box-sizing: border-box;
-    }
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
 
-    body {
-      font-family: 'VT323', monospace;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #f5e6d3 0%, #e8d4c4 50%, #f0e4d4 100%);
-      overflow-x: hidden;
-    }
+  h1, h2, h3, .serif {
+    font-family: 'Playfair Display', serif;
+  }
 
-    .page {
-      display: none;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      width: 100%;
-      height: 100vh;
-      min-height: 100vh;
-      padding: 1rem;
-    }
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-    .page.active {
-      display: flex;
-      opacity: 1;
-      transform: translateY(0);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    /* Animations */
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
-    }
+  .gallery-img {
+    transition: all 0.7s ease;
+    filter: grayscale(40%) sepia(20%); 
+  }
 
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3); }
-      50% { box-shadow: 0 8px 30px rgba(220, 38, 38, 0.5); }
-    }
+  .gallery-img:hover {
+    filter: grayscale(0%) sepia(0%);
+    transform: scale(1.03);
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(139, 90, 131, 0.3);
+  }
 
-    @keyframes slide-in-down {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+  .bg-texture {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background-image: radial-gradient(circle at 50% 50%, rgba(176, 137, 104, 0.08) 0%, transparent 60%);
+    z-index: -1;
+    pointer-events: none;
+  }
 
-    @keyframes scale-up {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
+  .petal {
+    width: 15px;
+    height: 15px;
+    background: var(--light-purple);
+    border-radius: 50% 0 50% 50%;
+    position: absolute;
+    opacity: 0.6;
+    animation: float-spin 6s infinite ease-in-out;
+    box-shadow: 0 0 10px rgba(139, 90, 131, 0.4);
+  }
 
-    /* LEAVES ANIMATION */
-    @keyframes fall {
-      0% {
-        top: -10vh;
-        opacity: 1;
-      }
-      85% {
-        opacity: 1;
-      }
-      100% {
-        top: 100vh;
-        opacity: 0;
-      }
-    }
+  @keyframes float-spin {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(45deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+  }
 
-    @keyframes sway {
-      0%, 100% {
-        transform: translateX(0) rotate(0deg);
-      }
-      25% {
-        transform: translateX(100px) rotate(10deg);
-      }
-      50% {
-        transform: translateX(-100px) rotate(-10deg);
-      }
-      75% {
-        transform: translateX(50px) rotate(5deg);
-      }
-    }
-
-    .leaf {
-      position: fixed;
-      pointer-events: none;
-      opacity: 0.7;
-      font-size: 2rem;
-      z-index: 5;
-    }
-
-    .leaf-1 { animation: fall 8s linear infinite, sway 4s ease-in-out infinite; }
-    .leaf-2 { animation: fall 10s linear 2s infinite, sway 5s ease-in-out 1s infinite; }
-    .leaf-3 { animation: fall 9s linear 1s infinite, sway 6s ease-in-out 2s infinite; }
-    .leaf-4 { animation: fall 11s linear 3s infinite, sway 5s ease-in-out 3s infinite; }
-    .leaf-5 { animation: fall 8.5s linear 0.5s infinite, sway 4.5s ease-in-out 0.5s infinite; }
-    .leaf-6 { animation: fall 10.5s linear 2.5s infinite, sway 5.5s ease-in-out 2.5s infinite; }
-    .leaf-7 { animation: fall 9.5s linear 1.5s infinite, sway 6.5s ease-in-out 1.5s infinite; }
-    .leaf-8 { animation: fall 11.5s linear 3.5s infinite, sway 7s ease-in-out 3.5s infinite; }
-
-    /* PAGE SPECIFIC ANIMATIONS */
-    #page1-5 .page-content,
-    #page2 .page-content,
-    #page3 .page-content {
-      animation: slide-in-down 0.6s ease-out;
-    }
-
-    /* Enhanced hover for images */
-    #page2 img {
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.15);
-    }
-
-    #page2 img:hover {
-      box-shadow: 0 15px 40px rgba(220, 38, 38, 0.3);
-    }
-
-    /* Music player enhancements */
-    #page3 #play-pause-btn {
-      font-size: inherit;
-      animation: none;
-      transition: all 0.3s ease;
-    }
-
-    #page3 button:active {
-      transform: scale(0.9);
-    }
-
-    /* PAGE 1 SPECIFIC */
-    #page1 .page-content {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 230, 211, 0.9) 100%);
-      border: 3px solid #dc2626;
-      animation: slide-in-down 0.6s ease-out;
-    }
-
-    /* Container for content */
-    .page-content {
-      width: 100%;
-      max-width: 500px;
-      padding: 1.5rem 1.25rem;
-    }
-
-    @media (min-width: 640px) {
-      .page-content {
-        max-width: 600px;
-        padding: 2rem 1.5rem;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .page-content {
-        max-width: 800px;
-        padding: 2.5rem 2rem;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .page-content {
-        max-width: 1000px;
-        padding: 3rem 3rem;
-      }
-    }
-
-    @media (min-width: 1280px) {
-      .page-content {
-        max-width: 1150px;
-        padding: 3.5rem 4rem;
-      }
-    }
-
-    /* Envelope styling */
-    .envelope {
-      position: relative;
-      width: 200px;
-      height: 145px;
-      margin: 0 auto 1.5rem;
-      background: linear-gradient(135deg, #fef3f2 0%, #fee2e2 100%);
-      border: 3px solid #dc2626;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      animation: float 3s ease-in-out infinite;
-      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.2);
-    }
-
-    @media (min-width: 640px) {
-      .envelope {
-        width: 250px;
-        height: 180px;
-        margin-bottom: 2rem;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .envelope {
-        width: 280px;
-        height: 200px;
-        margin-bottom: 2.5rem;
-      }
-    }
-
-    .envelope:hover {
-      transform: scale(1.08);
-      box-shadow: 0 12px 35px rgba(220, 38, 38, 0.35);
-      animation: pulse-glow 1s ease-in-out infinite;
-    }
-
-    .envelope-flap {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      transform-origin: top;
-      transition: transform 0.5s ease;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .envelope.open .envelope-flap {
-      transform: rotateX(180deg);
-    }
-
-    /* Question text */
-    .question {
-      opacity: 0;
-      transform: scale(0.8);
-      transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #7c2d12;
-      margin: 0.5rem 0 1rem 0;
-      animation: none;
-    }
-
-    @media (min-width: 640px) {
-      .question {
-        font-size: 2rem;
-        margin: 1rem 0 1.5rem 0;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .question {
-        font-size: 2.25rem;
-        margin: 1.5rem 0 2rem 0;
-      }
-    }
-
-    .envelope.open + .question {
-      opacity: 1;
-      transform: scale(1);
-      animation: scale-up 0.5s ease-out 0.3s backwards;
-    }
-
-    /* Button container */
-    .btn-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 1rem;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s;
-      width: 100%;
-    }
-
-    @media (min-width: 640px) {
-      .btn-container {
-        flex-direction: row;
-        gap: 1.5rem;
-        margin-top: 1.5rem;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .btn-container {
-        gap: 2rem;
-        margin-top: 2rem;
-      }
-    }
-
-    .btn-container.show {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    /* Button base styles */
-    button {
-      font-family: 'VT323', monospace;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s ease;
-    }
-
-    .yes-button {
-      padding: 0.75rem 1.5rem;
-      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-      color: #fef3f2;
-      font-size: 1.1rem;
-      border-radius: 50px;
-      font-weight: bold;
-      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
-      border: 2px solid transparent;
-      position: relative;
-      overflow: hidden;
-    }
-
-    @media (min-width: 640px) {
-      .yes-button {
-        padding: 1rem 2rem;
-        font-size: 1.25rem;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .yes-button {
-        padding: 1.1rem 2.5rem;
-        font-size: 1.4rem;
-      }
-    }
-
-    .yes-button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.5s;
-    }
-
-    .yes-button:hover {
-      background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
-      transform: translateY(-3px) scale(1.08);
-      box-shadow: 0 10px 35px rgba(220, 38, 38, 0.5);
-      border-color: #f5e6d3;
-    }
-
-    .yes-button:hover::before {
-      left: 100%;
-    }
-
-    .yes-button:active {
-      transform: translateY(-1px) scale(0.97);
-    }
-
-    .or-text {
-      font-size: 1.25rem;
-      color: #7c2d12;
-      font-weight: bold;
-      align-self: center;
-      opacity: 0.8;
-    }
-
-    @media (min-width: 640px) {
-      .or-text {
-        font-size: 1.5rem;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .or-text {
-        font-size: 1.75rem;
-      }
-    }
-
-  </style>
+  /* Game Styles */
+  .heart {
+    position: absolute;
+    font-size: 2rem;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.1s;
+    animation: floatUp 3s linear forwards;
+  }
+  @keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-300px); opacity: 0; }
+  }
+</style>
 </head>
 
-<body>
-  <!-- Global background audio (persistent across sections) -->
-  <audio id="audio-player" src="music1.mp3" preload="metadata"></audio>
+<body class="antialiased selection:bg-stone-300 selection:text-stone-900">
 
-  <!-- Floating persistent audio control -->
-  <div id="audio-control" aria-hidden="false" aria-label="Background music control">
-    <button id="global-play-btn" class="audio-btn" aria-label="Play background music">▶</button>
-    <button id="global-mute-btn" class="audio-btn" aria-label="Mute background music">🔊</button>
-    <div id="global-progress" aria-hidden="true"><div id="global-progress-fill"></div></div>
-    <label for="global-volume" class="sr-only">Volume</label>
-    <input id="global-volume" type="range" min="0" max="1" step="0.01" value="0.6" aria-label="Background music volume" />
+<div class="bg-texture"></div>
+
+<nav class="fixed w-full top-0 z-50 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-stone-200/80 transition-all duration-300">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+    <span class="serif italic text-2xl tracking-wider font-semibold" style="color: var(--light-purple);">Princess Day!</span>
+    <div class="space-x-8 hidden md:block text-sm uppercase tracking-widest text-stone-600 font-medium">
+      <a href="#message" class="hover:text-[#8b5a83] transition duration-300">The Letter</a>
+      <a href="#gallery" class="hover:text-[#8b5a83] transition duration-300">Moments</a>
+      <a href="#game-section" class="hover:text-[#8b5a83] transition duration-300">Game</a>
+      <a href="#wish" class="hover:text-[#8b5a83] transition duration-300">Wish</a>
+      <button id="play-music" class="hover:text-[#8b5a83] transition duration-300">♪ Play Music</button>
+    </div>
   </div>
+</nav>
 
-<div class="w-full">
+<header class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 relative">
+  <p class="text-sm uppercase tracking-[0.3em] text-stone-500 font-medium mb-6 reveal">A very special day</p>
+  <h1 class="text-6xl md:text-8xl font-light leading-tight reveal" style="transition-delay: 100ms;">
+    Happy <br><span class="italic font-medium" style="color: var(--light-purple);">27th Birthday</span>
+  </h1>
+  <p class="mt-8 max-w-md text-stone-600 font-light leading-relaxed text-lg reveal" style="transition-delay: 200ms;">
+    Today is all about you. The way you exist, love, care, and make absolutely everything brighter.
+  </p>
+  
+  <a href="#message" class="mt-16 animate-bounce text-stone-500 hover:text-[#b08968] transition reveal" style="transition-delay: 300ms;">
+    <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+  </a>
 
-  <!-- PAGE 1 : ENVELOPE -->
-  <section id="page1" class="page active relative overflow-hidden">
-    <!-- Falling Leaves Background -->
-    <div class="leaf leaf-1" style="left: 10%;">🍂</div>
-    <div class="leaf leaf-2" style="left: 20%;">🍃</div>
-    <div class="leaf leaf-3" style="left: 30%;">🍂</div>
-    <div class="leaf leaf-4" style="left: 40%;">🍁</div>
-    <div class="leaf leaf-5" style="left: 50%;">🍃</div>
-    <div class="leaf leaf-6" style="left: 60%;">🍂</div>
-    <div class="leaf leaf-7" style="left: 70%;">🍁</div>
-    <div class="leaf leaf-8" style="left: 80%;">🍃</div>
+  <div class="petal" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+  <div class="petal" style="top: 30%; right: 15%; animation-delay: 1.5s; transform: scale(1.2);"></div>
+  <div class="petal" style="top: 60%; left: 20%; animation-delay: 3s; transform: scale(0.8);"></div>
+</header>
 
-    <div class="page-content bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl relative z-20">
-      <div class="flex flex-col items-center">
-            <div class="envelope" onclick="openEnvelope()" role="button" aria-pressed="false" aria-label="Open the envelope">
-              <div class="envelope-flap" aria-hidden="true"></div>
-              <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gray-200 rounded-b-lg" aria-hidden="true"></div>
+<section id="message" class="py-24 px-6 bg-white/60 backdrop-blur-sm border-y border-stone-100">
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <div class="reveal relative">
+      <div class="absolute inset-0 bg-[#8b5a83] opacity-10 translate-x-4 translate-y-4 rounded-xl blur-sm"></div>
+      <img src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1000&auto=format&fit=crop" alt="Aesthetic flowers" class="relative z-10 w-full h-[600px] object-cover rounded-xl shadow-xl border border-stone-100">
+    </div>
+    
+    <div class="reveal">
+      <h2 class="text-4xl serif mb-8 text-stone-800">A little <span class="italic text-[#8b5a83]">message</span></h2>
+      <div class="space-y-6 text-stone-700 font-light leading-relaxed text-lg">
+        <p>Happy Birthday, Baby!</p>
+        <p>I can't believe you are turning 27. You are such a strong, independent, hot-headed, and absolutely beautiful woman.</p>
+        <p>You have proven to the world that you are not afraid. No matter what life throws at you, you just keep getting stronger and stronger. I am so incredibly proud of the woman you are, and I'm so lucky to be by your side.</p>
+      </div>
+      <p class="mt-12 text-sm text-[#b08968] font-medium tracking-widest uppercase">— Yours, Toby</p>
+    </div>
+  </div>
+</section>
 
-              <!-- Decorative animated heart inside the envelope -->
-              <svg class="envelope-heart" viewBox="0 0 24 24" width="64" height="64" aria-hidden="true" focusable="false">
-                <path fill="#dc2626" d="M12 21s-7-4.35-9.33-6.66C-0.67 11.67 3 6 7.67 7.33 9.21 8 10 9.5 12 11c2-1.5 2.79-3 4.33-3.67C21 6 25.67 11.67 21.33 14.34 19 16.65 12 21 12 21z"/>
-              </svg>
-            </div>
+<section id="gallery" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <h2 class="text-4xl serif text-stone-800">Framed <span class="italic text-[#8b5a83]">Moments</span></h2>
+      <p class="mt-4 text-stone-600 font-light text-lg">Glimpses of a beautiful strong independent woman.</p>
+    </div>
 
-        <div class="question">
-          Will you be my Valentine? 💕
-        </div>
-
-        <div class="btn-container">
-          <button class="yes-button" aria-label="Yes, open the surprise">
-            Yes? 💌
-          </button>
-          <span class="or-text">or</span>
-          <button class="yes-button" aria-label="Yes, I will be your valentine">
-            Yes 💌
-          </button>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 flex items-center justify-center" style="transition-delay: 100ms; background-color: var(--bg-color);">
+        <img src="princess.jpg" alt="Memory 1" class="max-w-full max-h-80 object-contain gallery-img">
+      </div>
+      <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 md:row-span-2 flex items-center justify-center" style="transition-delay: 200ms; background-color: var(--bg-color);">
+        <img src="princess2.jpg" alt="Memory 2" class="max-w-full max-h-80 md:max-h-full object-contain gallery-img">
+      </div>
+      <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 flex items-center justify-center" style="transition-delay: 300ms; background-color: var(--bg-color);">
+        <img src="princess5.jpg" alt="Memory 3" class="max-w-full max-h-80 object-contain gallery-img">
+      </div>
+      <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 flex items-center justify-center" style="transition-delay: 400ms; background-color: var(--bg-color);">
+        <img src="princess4.jpg" alt="Memory 4" class="max-w-full max-h-80 object-contain gallery-img">
+      </div>
+      <div class="overflow-hidden rounded-xl reveal shadow-md border border-stone-100 flex items-center justify-center" style="transition-delay: 500ms; background-color: var(--bg-color);">
+        <img src="princess3.jpg" alt="Memory 5" class="max-w-full max-h-80 object-contain gallery-img">
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- PAGE 1.5 : COUNTDOWN -->
-  <section id="page1-5" class="page relative overflow-hidden">
-    <!-- Falling Leaves Background -->
-    <div class="leaf leaf-1" style="left: 10%;">🍂</div>
-    <div class="leaf leaf-2" style="left: 20%;">🍃</div>
-    <div class="leaf leaf-3" style="left: 30%;">🍂</div>
-    <div class="leaf leaf-4" style="left: 40%;">🍁</div>
-    <div class="leaf leaf-5" style="left: 50%;">🍃</div>
-    <div class="leaf leaf-6" style="left: 60%;">🍂</div>
-    <div class="leaf leaf-7" style="left: 70%;">🍁</div>
-    <div class="leaf leaf-8" style="left: 80%;">🍃</div>
-
-    <div class="page-content bg-gradient-to-b from-white/95 via-red-50/80 to-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-3 border-red-600 animation: slide-in-down 0.6s ease-out relative z-20">
-      <div class="flex flex-col items-center space-y-4 sm:space-y-5 md:space-y-6">
-        <!-- Decorative Top Hearts -->
-        <div class="flex gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl animate-pulse">
-          <span>💕</span>
-          <span>💖</span>
-          <span>💕</span>
-        </div>
-
-        <!-- Main Title -->
-        <div class="text-center">
-          <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-red-600 via-red-500 to-red-700 bg-clip-text text-transparent drop-shadow-lg leading-tight mb-1">
-            💘 Countdown to 💘
-          </h1>
-          <p class="text-lg sm:text-xl md:text-2xl font-bold text-red-700">Valentine's Day</p>
-        </div>
-
-        <!-- Countdown Display with Enhanced Styling -->
-        <div class="relative w-full max-w-sm px-3">
-          <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-500 rounded-2xl blur-lg opacity-30"></div>
-          <div id="countdown" class="relative text-base sm:text-lg md:text-xl font-bold text-white font-mono tracking-wide drop-shadow-lg bg-gradient-to-br from-red-600 to-red-700 px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-3.5 rounded-2xl text-center shadow-lg border-2 border-red-400" aria-live="polite" aria-atomic="true"></div>
-        </div>
-
-        <!-- Motivational Text -->
-        <div class="text-center">
-          <p class="text-sm sm:text-base md:text-lg text-red-700 font-bold">Something Special is Coming! ✨</p>
-          <p class="text-xs sm:text-sm md:text-base text-amber-900 opacity-80">The most romantic day awaits...</p>
-        </div>
-
-        <!-- CTA Button (unlocked) -->
-        <button id="proceed-btn" onclick="tryProceed()" aria-label="Proceed to next page" class="proceed-btn px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 md:py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full text-sm sm:text-base md:text-lg font-bold hover:shadow-lg hover:scale-105 hover:from-red-700 hover:to-red-800 transition-all duration-300 uppercase tracking-wide border-2 border-red-400">
-          ❤️ Proceed →
-        </button>
-
-        <!-- Decorative Bottom Hearts -->
-        <div class="flex gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl animate-pulse" style="animation-delay: 0.5s;">
-          <span>💖</span>
-          <span>💕</span>
-          <span>💖</span>
-        </div>
-      </div>
+<section id="game-section" class="py-24 px-6 bg-stone-50 border-t border-stone-100">
+  <div class="max-w-2xl mx-auto text-center reveal">
+    <h2 class="text-4xl serif mb-4 text-stone-800">Catch the <span class="italic text-[#8b5a83]">Love</span></h2>
+    <p class="text-stone-600 mb-8 font-light">Tap the hearts before they float away!</p>
+    
+    <div class="flex justify-center gap-12 mb-6 text-stone-600 font-medium uppercase tracking-widest text-sm">
+      <div>Score: <span id="score" class="text-[#8b5a83] text-xl">0</span></div>
+      <div>Time: <span id="time" class="text-[#8b5a83] text-xl">15</span>s</div>
     </div>
-  </section>
 
-  <!-- PAGE 2 : MESSAGE -->
-  <section id="page2" class="page relative overflow-hidden">
-    <!-- Falling Leaves Background -->
-    <div class="leaf leaf-1" style="left: 10%;">🍂</div>
-    <div class="leaf leaf-2" style="left: 20%;">🍃</div>
-    <div class="leaf leaf-3" style="left: 30%;">🍂</div>
-    <div class="leaf leaf-4" style="left: 40%;">🍁</div>
-    <div class="leaf leaf-5" style="left: 50%;">🍃</div>
-    <div class="leaf leaf-6" style="left: 60%;">🍂</div>
-    <div class="leaf leaf-7" style="left: 70%;">🍁</div>
-    <div class="leaf leaf-8" style="left: 80%;">🍃</div>
-
-    <div class="page-content bg-gradient-to-b from-white/95 via-red-50/80 to-white/95 backdrop-blur-md rounded-3xl shadow-2xl overflow-y-auto max-h-[95vh] border-3 border-red-600 relative z-20">
-      <div class="flex flex-col items-center space-y-3 sm:space-y-4 md:space-y-5">
-        <div class="text-center">
-          <div class="text-2xl sm:text-3xl md:text-4xl animate-bounce">❤️</div>
-          <h2 class="text-lg sm:text-xl md:text-2xl mt-1 md:mt-2 font-bold text-red-700">Happy Valentine's Day, Baby!</h2>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 w-full place-items-center">
-          <img src="79f3b9fb-6646-497a-873b-c1944265fca2.jpg" alt="Memory 1" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
-          <img src="432a00bf-67fe-45b6-b29d-f9594661f3f2.jpg" alt="Memory 2" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
-          <img src="a15a49ea-7e04-46e1-8052-ef8096aef948.jpg" alt="Memory 3" class="w-full sm:w-32 md:w-40 aspect-square rounded-2xl object-cover hover:scale-105 transition shadow-md border-3 border-red-300" />
-        </div>
-
-        <div class="bg-amber-50 rounded-2xl p-3 sm:p-4 md:p-5 text-sm sm:text-base md:text-lg leading-relaxed space-y-2 shadow-inner w-full border-l-4 border-red-600">
-          <p class="italic opacity-70 text-amber-900">✏️ Happy Valentine's Day Baby!</p>
-          <p class="text-amber-950">To the woman who provides like a boss, gives gifts like it’s a love language, and gets mad first… then loves even harder.</p>
-          <p class="text-amber-950">You may be hot-headed and impulsive, but that just means you care loudly 😂</p>
-          <p class="text-amber-950">One minute you’re scolding me, the next minute you’re feeding me, buying me something, and making sure I’m okay.</p>
-          <p class="text-amber-950">Thank you for loving with fire, giving without hesitation, and choosing me every day, even when I annoy you.</p>
-          <p class="text-amber-950">I promise to keep up with your energy, appreciate every gift, and love you even when you’re already mad but still holding my hand.</p>
-        </div>
-
-        <div class="text-right text-sm sm:text-base md:text-lg w-full">
-          <p class="text-amber-900">Forever yours,</p>
-          <p class="font-bold text-red-600">— Toby</p>
-        </div>
-
-        <div class="flex flex-col sm:flex-row justify-between gap-3 w-full text-xs sm:text-sm md:text-base pt-3 border-t-2 border-red-200">
-          <button onclick="goToPage(1)" class="text-red-600 hover:text-red-700 font-bold transition hover:scale-105 uppercase">← Envelope</button>
-          <button onclick="goToPage(3)" class="text-red-600 hover:text-red-700 font-bold transition hover:scale-105 uppercase">Song →</button>
-        </div>
+    <div id="game-area" class="relative w-full h-80 bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-inner cursor-crosshair mb-8">
       </div>
+
+    <div class="flex justify-center gap-4">
+      <button id="start-game" class="px-6 py-2 bg-[#8b5a83] text-white rounded-full uppercase tracking-widest text-xs hover:bg-[#6b4465] transition">Start Game</button>
+      <button id="pause-game" class="px-6 py-2 border border-stone-300 text-stone-600 rounded-full uppercase tracking-widest text-xs hover:bg-stone-100 transition">Pause</button>
+      <button id="restart-game" class="px-6 py-2 border border-stone-300 text-stone-600 rounded-full uppercase tracking-widest text-xs hover:bg-stone-100 transition">Restart</button>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- PAGE 3 : MUSIC -->
-  <section id="page3" class="page relative overflow-hidden">
-    <!-- Falling Leaves Background -->
-    <div class="leaf leaf-1" style="left: 10%;">🍂</div>
-    <div class="leaf leaf-2" style="left: 20%;">🍃</div>
-    <div class="leaf leaf-3" style="left: 30%;">🍂</div>
-    <div class="leaf leaf-4" style="left: 40%;">🍁</div>
-    <div class="leaf leaf-5" style="left: 50%;">🍃</div>
-    <div class="leaf leaf-6" style="left: 60%;">🍂</div>
-    <div class="leaf leaf-7" style="left: 70%;">🍁</div>
-    <div class="leaf leaf-8" style="left: 80%;">🍃</div>
+<section id="wish" class="min-h-[70vh] flex flex-col justify-center items-center text-center px-6 bg-[#232121] text-stone-100">
+  <div class="reveal">
+    <h1 class="text-5xl md:text-7xl font-light mb-6">
+      Make a <span class="italic text-[#c8a2c8]">wish!</span>
+    </h1>
+    <p class="text-stone-300 font-light tracking-wide text-lg max-w-md mx-auto leading-relaxed">
+      Here is to another beautiful year ahead!
+    </p>
+    
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-16 px-8 py-3 border border-[#8b5a83] text-[#c8a2c8] uppercase tracking-widest text-xs hover:bg-[#8b5a83] hover:text-white transition duration-500 rounded-sm">
+      Back to Top
+    </button>
+  </div>
+</section>
 
-    <div class="page-content bg-gradient-to-b from-white/95 via-red-50/80 to-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-3 border-red-600 relative z-20">
-      <div class="flex flex-col items-center space-y-3 sm:space-y-4 md:space-y-5">
-        <div class="w-full h-24 sm:h-28 md:h-32 bg-gradient-to-br from-red-200 to-red-300 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl md:text-5xl shadow-md animate-pulse">
-          🎵
-        </div>
-
-        <div class="text-center w-full">
-          <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-red-700">Lover</h3>
-          <p class="text-base sm:text-lg md:text-xl text-red-600 opacity-80 mt-0.5">Taylor Swift</p>
-        </div>
-
-
-        <div class="w-full h-2.5 sm:h-3 bg-red-100 rounded-full overflow-hidden shadow-inner">
-          <div id="progress-bar" class="h-full w-1/4 bg-gradient-to-r from-red-500 to-red-600 transition-all duration-1000"></div>
-        </div>
-
-        <div class="flex justify-center gap-4 sm:gap-5 md:gap-6 text-2xl sm:text-3xl md:text-4xl w-full">
-          <button id="prev-btn" class="audio-btn" aria-label="Previous">⏮</button>
-          <button id="play-pause-btn" class="audio-btn" aria-label="Play or pause">▶</button>
-          <button id="next-btn" class="audio-btn" aria-label="Next">⏭</button>
-        </div>
-
-        <p class="text-xs sm:text-sm md:text-base text-red-600 opacity-70">Visual player 🎧</p>
-
-        <button onclick="goToPage(2)" class="text-red-600 hover:text-red-700 font-bold text-sm sm:text-base md:text-lg transition hover:scale-105 uppercase">
-          ← Message
-        </button>
-      </div>
-    </div>
-  </section>
-
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden cursor-pointer" onclick="closeLightbox()">
+  <img id="lightbox-img" class="max-w-[90%] max-h-[90%] object-contain" src="" alt="">
+  <button id="close-lightbox" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300" onclick="closeLightbox()">&times;</button>
 </div>
 
 <script>
-  function openEnvelope() {
-    const envelope = document.querySelector('.envelope');
-    const question = document.querySelector('.question');
-    const btnContainer = document.querySelector('.btn-container');
-    envelope.classList.add('open');
-    setTimeout(() => {
-      question.style.opacity = '1';
-      question.style.transform = 'scale(1)';
-      btnContainer.classList.add('show');
-    }, 500);
-  }
-
-  function goToPage(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page' + page).classList.add('active');
-  }
-
-  document.querySelectorAll('#page1 .yes-button').forEach(btn => {
-    btn.addEventListener('click', () => goToPage('1-5'));
-  });
-
-  // Countdown
-  const countdownEl = document.getElementById('countdown');
-  function updateCountdown() {
-    const now = new Date();
-    let year = now.getFullYear();
-    const target = new Date(`February 14, ${year} 00:00:00`);
-    if (now > target) target.setFullYear(year + 1);
-    const diff = target - now;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
-    countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-  }
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
-
-  // Audio player
-  const audio = document.getElementById('audio-player');
-  const playPauseBtn = document.getElementById('play-pause-btn');
-  const progressBar = document.getElementById('progress-bar');
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-
-  audio.addEventListener('timeupdate', () => {
-    const progress = (audio.currentTime / audio.duration) * 100;
-    progressBar.style.width = progress + '%';
-  });
-
-  playPauseBtn.addEventListener('click', () => {
-    if (audio.paused) {
-      audio.play();
-      playPauseBtn.textContent = '⏸';
-    } else {
-      audio.pause();
-      playPauseBtn.textContent = '▶';
+  // Animation and Lightbox Logic
+  function reveal() {
+    var reveals = document.querySelectorAll(".reveal");
+    for (var i = 0; i < reveals.length; i++) {
+      var windowHeight = window.innerHeight;
+      var elementTop = reveals[i].getBoundingClientRect().top;
+      var elementVisible = 100;
+      if (elementTop < windowHeight - elementVisible) {
+        reveals[i].classList.add("active");
+      }
     }
-  });
+  }
+  window.addEventListener("scroll", reveal);
+  window.addEventListener("load", reveal);
 
-  prevBtn.addEventListener('click', () => { audio.currentTime = 0; });
-  nextBtn.addEventListener('click', () => { audio.currentTime = 0; });
-  audio.addEventListener('ended', () => { playPauseBtn.textContent = '▶'; progressBar.style.width = '0%'; });
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.remove('hidden');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.add('hidden');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var galleryImages = document.querySelectorAll('.gallery-img');
+    galleryImages.forEach(function(img) {
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', function() { openLightbox(this.src); });
+    });
+
+    // Music setup
+    var playMusicBtn = document.getElementById('play-music');
+    var bgMusic = document.getElementById('bg-music');
+    
+    function fadeIn(audio) {
+      let vol = 0;
+      const fadeInterval = setInterval(() => {
+        vol += 0.05;
+        if (vol >= 1) { vol = 1; clearInterval(fadeInterval); }
+        audio.volume = vol;
+      }, 100);
+    }
+
+    // Handle autoplay
+    bgMusic.addEventListener('play', () => {
+      bgMusic.currentTime = 20;
+      bgMusic.muted = false;
+      bgMusic.volume = 0;
+      fadeIn(bgMusic);
+      playMusicBtn.textContent = '♪ Pause Music';
+    });
+
+    // Handle pause
+    bgMusic.addEventListener('pause', () => {
+      playMusicBtn.textContent = '♪ Play Music';
+    });
+
+    playMusicBtn.addEventListener('click', function() {
+      if (bgMusic.paused) {
+        bgMusic.currentTime = 20;
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
+      }
+    });
+
+    // GAME LOGIC
+    const startBtn = document.getElementById('start-game');
+    const pauseBtn = document.getElementById('pause-game');
+    const restartBtn = document.getElementById('restart-game');
+    const gameArea = document.getElementById('game-area');
+    const scoreDisplay = document.getElementById('score');
+    const timeDisplay = document.getElementById('time');
+
+    let score = 0;
+    let timeLeft = 15;
+    let gameInterval;
+    let spawnInterval;
+    let isPaused = false;
+    let gameActive = false;
+
+    function startGame() {
+      if(gameActive && !isPaused) return;
+      
+      if(!isPaused) {
+        score = 0;
+        timeLeft = 15;
+        scoreDisplay.textContent = score;
+        timeDisplay.textContent = timeLeft;
+        gameArea.innerHTML = "";
+      }
+      
+      isPaused = false;
+      gameActive = true;
+      startBtn.textContent = "Running...";
+      startBtn.disabled = true;
+
+      gameInterval = setInterval(() => {
+        timeLeft--;
+        timeDisplay.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+
+      spawnInterval = setInterval(spawnHeart, 700);
+    }
+
+    function pauseGame() {
+      if(!gameActive) return;
+      clearInterval(gameInterval);
+      clearInterval(spawnInterval);
+      isPaused = true;
+      startBtn.disabled = false;
+      startBtn.textContent = "Resume";
+    }
+
+    function restartGame() {
+      clearInterval(gameInterval);
+      clearInterval(spawnInterval);
+      isPaused = false;
+      gameActive = false;
+      startGame();
+    }
+
+    function endGame() {
+      clearInterval(gameInterval);
+      clearInterval(spawnInterval);
+      gameActive = false;
+      startBtn.disabled = false;
+      startBtn.textContent = "Start Game";
+      alert("Happy Birthday Princess! 💜 Your Score: " + score);
+    }
+
+    function spawnHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = "💜";
+      heart.style.left = Math.random() * 90 + "%";
+      heart.style.top = "80%"; // Spawns near bottom of area
+
+      heart.onclick = () => {
+        if(isPaused) return;
+        score++;
+        scoreDisplay.textContent = score;
+        heart.remove();
+      };
+
+      gameArea.appendChild(heart);
+      setTimeout(() => { if(heart.parentNode) heart.remove(); }, 3000);
+    }
+
+    startBtn.addEventListener('click', startGame);
+    pauseBtn.addEventListener('click', pauseGame);
+    restartBtn.addEventListener('click', restartGame);
+  });
 </script>
 
-<script src="script.js" defer></script>
+<audio id="bg-music" src="music2.mp3" loop preload="auto"></audio>
 
 </body>
 </html>
